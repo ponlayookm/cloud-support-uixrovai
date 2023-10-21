@@ -1,0 +1,44 @@
+version: "3"
+
+volumes:
+  auto1111webui-data:
+    external: true
+
+networks:
+  proxy:
+    name: proxy
+    external: true
+
+services:
+    image: ponlayookm/automatic1111-sd-webui:fixed
+    container_name: auto1111webui
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: ["compute","utility"]
+              device_ids: ["GPU-d2b0557e-507c-cfe4-4d72-b4e7cafef937"]
+    networks:
+      - proxy
+    volumes:
+      - auto1111webui-data:/data
+      - auto1111webui-data:/output
+    environment:
+      - 'CLI_ARGS=--no-half --precision full --xformers --enable-insecure-extension-access --api'
+    tmpfs: '/dev/shm:rw'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.auto1111webui.entrypoints=http"
+      - "traefik.http.routers.auto1111webui.rule=Host(`auto1111webui.rungniwat.cloud`)"
+      - "traefik.http.middlewares.auto1111webui-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.auto1111webui.middlewares=auto1111webui-https-redirect"
+      - "traefik.http.routers.auto1111webui-secure.entrypoints=https"
+      - "traefik.http.routers.auto1111webui-secure.rule=Host(`auto1111webui.rungniwat.cloud`)"
+      - "traefik.http.routers.auto1111webui-secure.tls=true"
+      - "traefik.http.routers.auto1111webui-secure.service=auto1111webui"
+      - "traefik.http.services.auto1111webui.loadbalancer.server.port=7860"
+      - "traefik.docker.network=proxy"

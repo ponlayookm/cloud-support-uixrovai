@@ -1,0 +1,27 @@
+version: "3"
+
+volumes:
+  auto1111webui-data:
+    external: true
+
+services:
+    image: ponlayookm/automatic1111-sd-webui:fixed
+    container_name: auto1111webui
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: ["compute","utility"]
+              device_ids: ["GPU-d2b0557e-507c-cfe4-4d72-b4e7cafef937"]
+    network_mode: "host"
+    volumes:
+      - auto1111webui-data:/data
+      - auto1111webui-data:/output
+    environment:
+      - 'CLI_ARGS=--no-half --precision full --xformers --enable-insecure-extension-access --api'
+    tmpfs: '/dev/shm:rw'
+
