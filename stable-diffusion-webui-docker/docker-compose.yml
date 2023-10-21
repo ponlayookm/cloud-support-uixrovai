@@ -5,21 +5,23 @@ volumes:
     external: true
 
 services:
-    image: camenduru/stable-diffusion-webui-docker:latest
-    container_name: auto1111webui
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              capabilities: ["compute","utility"]
-              device_ids: ["GPU-d2b0557e-507c-cfe4-4d72-b4e7cafef937"]
-    network_mode: "host"
-    volumes:
-      - auto1111webui-data:/data
-      - auto1111webui-data:/output
-    environment:
-      - 'CLI_ARGS=--no-half --precision full --xformers --enable-insecure-extension-access --api'
+    auto1111webui:
+      image: camenduru/stable-diffusion-webui-docker-lite #local built
+      container_name: auto1111webui
+      restart: unless-stopped
+      security_opt:
+        - no-new-privileges:true
+      deploy:
+        resources:
+          reservations:
+            devices:
+              - driver: nvidia
+                capabilities: ["compute","utility"]
+                count: 1
+      network_mode: 'host'
+      volumes:
+        - auto1111webui-data:/data
+        - auto1111webui-data:/output
+      environment:
+        - 'CLI_ARGS=--no-half --precision full --xformers --enable-insecure-extension-access --api'
+      tmpfs: '/dev/shm:rw'
