@@ -5,7 +5,7 @@ volumes:
     external: true
 
 services:
-    image: ponlayookm/automatic1111-sd-webui:fixed
+    image: camenduru/stable-diffusion-webui-docker:latest
     container_name: auto1111webui
     restart: unless-stopped
     security_opt:
