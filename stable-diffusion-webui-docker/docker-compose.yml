@@ -25,7 +25,7 @@ services:
     #  environment:
     #   - NB_UID=1000
     #   - NB_GID=1000
-    #   - 'CLI_ARGS=--no-half --precision full --xformers --enable-insecure-extension-access --api'
+    #   - 'CLI_ARGS=--listen --no-half --precision full --xformers --enable-insecure-extension-access --api'
     # tmpfs: '/dev/shm:rw'
     # labels:
     #   - "traefik.enable=true"
