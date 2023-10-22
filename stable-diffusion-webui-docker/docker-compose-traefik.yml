@@ -1,3 +1,4 @@
+# container running on traefik's reverse proxy
 version: "3"
 
 volumes:
@@ -6,7 +7,7 @@ volumes:
 
 networks:
   proxy:
-    name: proxy
+    name: proxy # use same networks as traefik's
     external: true
 
 services:
@@ -41,4 +42,4 @@ services:
       - "traefik.http.routers.auto1111webui-secure.tls=true"
       - "traefik.http.routers.auto1111webui-secure.service=auto1111webui"
       - "traefik.http.services.auto1111webui.loadbalancer.server.port=7860"
-      - "traefik.docker.network=proxy"
+      - "traefik.docker.network=proxy" # services will run on traefik's networks here

@@ -1,0 +1,28 @@
+docker run --gpus 'all,"capabilities=compute,utility"' -it -d \
+-p 12000:7860 \
+-v auto1111webui-data:/data \
+-v auto1111webui-data:/output \
+-e CLI_ARGS="--no-half --precision full --xformers --enable-insecure-extension-access --api" \
+-e NB_UID=1000 \
+-e NB_GID=1000 \
+--shm-size=256m \
+--tmpfs /dev/shm:rw \
+--restart unless-stopped \
+--name auto1111webui-temp \
+goolashe/automatic1111-sd-webui
+
+
+docker run --gpus 'all,"capabilities=compute,utility"' -it -d \
+-p 14000:8888 \
+-v auto1111-data:/home/jovyan/from-auto1111 \
+-v jupyter-data:/home/jovyan/work \
+-e NB_UID=1000 \
+-e NB_GID=1000 \
+--user root \
+-e GRANT_SUDO=yes \
+--shm-size=256m \
+--tmpfs /dev/shm:rw \
+--restart unless-stopped \
+--name Jupyanimatediff \
+jupyter/minimal-notebook
+

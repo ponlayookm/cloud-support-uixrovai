@@ -1,0 +1,9 @@
+## rsync with progress ##
+rsync -az /source /destination --info=progress2 --no-i-r
+
+## uninstall nvidia driver ##
+From cuda 11.4 onwards, an uninstaller script has been provided. Use it for the uninstallation:
+# To uninstall cuda
+sudo /usr/local/cuda-11.4/bin/cuda-uninstaller 
+# To uninstall nvidia
+sudo /usr/bin/nvidia-uninstall

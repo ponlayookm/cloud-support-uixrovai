@@ -1,0 +1,42 @@
+version: "3"
+
+volumes:
+  auto1111webui-data:
+    external: true
+  minimaljpy-data:
+    external: true
+
+services:
+  minimaljpy:
+    image: jupyter/minimal-notebook
+    container_name: minimaljpy
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: ["compute","utility"]
+    network_mode: "host"
+    volumes:
+      - 'auto1111webui-data:/home/jovyan/from-auto1111webui'
+      - 'minimaljpy-data:/home/jovyan/work'
+    environment:
+      - GRANT_SUDO=yes
+    user: root
+    tmpfs: '/dev/shm:rw'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.minimaljpy.entrypoints=http"
+      - "traefik.http.routers.minimaljpy.rule=Host(`minimaljpy.rungniwat.cloud`)"
+      - "traefik.http.middlewares.minimaljpy-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.minimaljpy.middlewares=minimaljpy-https-redirect"
+      - "traefik.http.routers.minimaljpy-secure.entrypoints=https"
+      - "traefik.http.routers.minimaljpy-secure.rule=Host(`minimaljpy.rungniwat.cloud`)"
+      - "traefik.http.routers.minimaljpy-secure.tls=true"
+      - "traefik.http.routers.minimaljpy-secure.service=minimaljpy"
+      - "traefik.http.services.minimaljpy.loadbalancer.server.port=8888"
+      - "traefik.docker.network=proxy"
