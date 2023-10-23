@@ -7,3 +7,7 @@ From cuda 11.4 onwards, an uninstaller script has been provided. Use it for the 
 sudo /usr/local/cuda-11.4/bin/cuda-uninstaller 
 # To uninstall nvidia
 sudo /usr/bin/nvidia-uninstall
+
+## good way to install Nvidia drivers .run file ##
+$ chmod +x /opt/nvidia/drivers/nvidia_manual_driver.run
+$ /opt/nvidia/drivers/nvidia_manual_driver.run --ui=none --no-questions
